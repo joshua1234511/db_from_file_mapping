@@ -1,3 +1,3 @@
 <?php 
 	
-	define('FILES_PATH', './downloads/');
+	define('FILES_PATH', __DIR__ . '/downloads/');
