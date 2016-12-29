@@ -22,14 +22,14 @@
     	// print_r("<pre>");
      //    print_r($Row);
      //    print_r("</pre>");
-        if($count != 0){
+        if($count != 0 && $Row[0] != ''){
 			$Reader1 = new SpreadsheetReader(FILES_PATH . 'OwlSharesTest.csv');
 		    $count1 = 0;
 		    foreach ($Reader1 as $Row1) {
 		    	// print_r("<pre>");
 		     //    print_r($Row1);
 		     //    print_r("</pre>");
-		        if($count1 != 0){
+		        if($count1 != 0 && $Row1[0] != ''){
 					// etf_performance
 					//$price = $Row1[];
 					$price = 0;
@@ -153,31 +153,53 @@
 		$count++;
         
     }
-    
-    
-	// $sql_securities = "INSERT INTO securities (ticker, name, asset_class, currency)
-	// VALUES (".$ticker.",".$name_securities.",".$asset_class.",".$currency.")";
+    if(false){
+	    $Reader = new SpreadsheetReader(FILES_PATH . 'ssProvide');
+	    $count = 0;
+	    foreach ($Reader as $Row) {
+	    	// print_r("<pre>");
+	     //    print_r($Row);
+	     //    print_r("</pre>");
+	        if($count != 0 && $Row[0] != ''){
+	        	//securities
+					$ticker = valueCheck($Row[12]);
+					$name_securities = valueCheck($Row[13]);
+					$asset_class = valueCheck($Row[15]);
+					$currency = valueCheck($Row[68]);
+					$sql_securities = "INSERT INTO securities (ticker, name, asset_class, currency)
+					VALUES (".$ticker.",".$name_securities.",".$asset_class.",".$currency.")";
 
-	// if ($conn->query($sql_securities) === TRUE) {
-	//     $last_id_securities = $conn->insert_id;
-	// } else {
-	//     echo "Error: " . $sql_securities . "<br>" . $conn->error;
-	// }
+					if ($conn->query($sql_securities) === TRUE) {
+					    $last_id_securities = $conn->insert_id;
+					} else {
+					    echo "Error: " . $sql_securities . "<br>" . $conn->error;
+					}
+				//etf_portfolio
+					$security_id = $last_id_securities;
+					//$weight_etf_portfolio = valueCheck($Row[]);//calc
+					$weight_etf_portfolio = 0;
+					$shares = valueCheck($Row[45]);
+					$market_value_base = valueCheck($Row[58]);
+					$market_value_local = valueCheck($Row[59]);
+					$sql_etf_portfolio = "INSERT INTO etf_portfolio (security_id, weight, shares, market, value, etf_id)
+					VALUES (".$security_id.",".$weight_etf_portfolio.",".$shares.",".$market_value_base.",".$market_value_local.",".$etf_id.")";
 
-	// $sql_etf_portfolio = "INSERT INTO etf_portfolio (security_id, weight, shares, market, value, etf_id)
-	// VALUES (".$security_id.",".$weight_etf_portfolio.",".$shares.",".$market.",".$value.",".$etf_id.")";
+					if ($conn->query($sql_etf_portfolio) === TRUE) {
+					    echo "New record created successfully";
+					} else {
+					    echo "Error: " . $sql_etf_portfolio . "<br>" . $conn->error;
+					}
+				//etf_sectors
+					// $name_etf_sectors = valueCheck($Row[]);
+					// $weight_etf_sectors = valueCheck($Row[]);
+					// $sql_etf_sectors = "INSERT INTO etf_sectors (etf_id, name, weight)
+					// VALUES ("$etf_id.",".$name_etf_sectors.",".$weight_etf_sectors.")";
 
-	// if ($conn->query($sql_etf_portfolio) === TRUE) {
-	//     echo "New record created successfully";
-	// } else {
-	//     echo "Error: " . $sql_etf_portfolio . "<br>" . $conn->error;
-	// }
-
-	// $sql_etf_sectors = "INSERT INTO etf_sectors (etf_id, name, weight)
-	// VALUES ("$etf_id.",".$name_etf_sectors.",".$weight_etf_sectors.")";
-
-	// if ($conn->query($sql_etf_sectors) === TRUE) {
-	//     echo "New record created successfully";
-	// } else {
-	//     echo "Error: " . $sql_etf_sectors . "<br>" . $conn->error;
-	// }
+					// if ($conn->query($sql_etf_sectors) === TRUE) {
+					//     echo "New record created successfully";
+					// } else {
+					//     echo "Error: " . $sql_etf_sectors . "<br>" . $conn->error;
+					// }
+	        }
+	    }
+	}

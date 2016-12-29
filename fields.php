@@ -91,8 +91,8 @@
 	$security_id;
 	$weight_etf_portfolio;
 	$shares;
-	$market;
-	$value;
+	$market_value_base;
+	$market_value_local;
 
 //etf_sectors
 	$name_etf_sectors;
