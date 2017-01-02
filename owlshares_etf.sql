@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 29, 2016 at 06:41 AM
+-- Generation Time: Jan 02, 2017 at 01:35 PM
 -- Server version: 5.5.51
 -- PHP Version: 5.5.12
 
@@ -138,10 +138,6 @@ CREATE TABLE IF NOT EXISTS `etf_performance` (
   `discount_days` int(11) NOT NULL COMMENT 'Premium Discont Analysis by Quarter (select a quarter)',
   `greatest_premium` decimal(6,2) NOT NULL COMMENT 'Premium Discont Analysis by Quarter (select a quarter)',
   `greatest_discount` float(6,2) NOT NULL COMMENT 'Premium Discont Analysis by Quarter (select a quarter)',
-  `premium_discount_range_days_1` int(11) NOT NULL COMMENT 'Premium Discount Range # of Days: 2.5-3 days',
-  `premium_discount_range_days_2` int(11) NOT NULL COMMENT 'Premium Discount Range # of Days: 1.5 to 2 days',
-  `premium_discount_range_days_3` int(11) NOT NULL COMMENT 'Premium Discount Range # of Days: 0.5 to 1 days',
-  `premium_discount_range_days_4` int(11) NOT NULL COMMENT 'Premium Discount Range # of Days: 0 to .5 days',
   `sp_benchmark_return_1yr` float(7,2) NOT NULL COMMENT 'Quarter End & Month End Versions',
   `owl500_index_return_1yr` float(7,2) NOT NULL COMMENT 'Quarter End & Month End Versions',
   `sp_benchmark_return_3yr` float(7,2) NOT NULL COMMENT 'Quarter End & Month End Versions',
@@ -154,8 +150,9 @@ CREATE TABLE IF NOT EXISTS `etf_performance` (
   `owl500_index_each_yr` float(7,2) NOT NULL COMMENT 'Calendar Year Returns',
   `cytd_nav` float(12,6) NOT NULL COMMENT 'NAV % for each year',
   `cytd_mp` float(12,6) NOT NULL COMMENT 'Market Price % for each year',
+  `created_on` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 -- --------------------------------------------------------
 
@@ -164,15 +161,16 @@ CREATE TABLE IF NOT EXISTS `etf_performance` (
 --
 
 CREATE TABLE IF NOT EXISTS `etf_portfolio` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `security_id` int(11) NOT NULL,
   `weight` decimal(5,2) NOT NULL,
   `shares` int(11) NOT NULL,
   `market_value_base` decimal(11,2) NOT NULL,
   `market_value_local` decimal(11,2) NOT NULL,
   `etf_id` int(11) NOT NULL,
+  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -185,6 +183,7 @@ CREATE TABLE IF NOT EXISTS `etf_sectors` (
   `etf_id` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
   `weight` decimal(5,2) NOT NULL,
+  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -195,13 +194,14 @@ CREATE TABLE IF NOT EXISTS `etf_sectors` (
 --
 
 CREATE TABLE IF NOT EXISTS `securities` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ticker` varchar(32) NOT NULL,
   `name` varchar(256) NOT NULL,
   `asset_class` varchar(32) NOT NULL,
   `currency` varchar(8) NOT NULL,
+  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
