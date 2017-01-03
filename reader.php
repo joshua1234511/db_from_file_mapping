@@ -12,9 +12,11 @@ $db->connect();
 
 $etf_id = 1; // Currently only 1 ETF
 
-$ReaderSS            = new SpreadsheetReader(FILES_PATH . 'ssProvide.csv');
-$ReaderOwlnav        = new SpreadsheetReader(FILES_PATH . 'OWLnav.xlsx');
-$ReaderOwlSharesTest = new SpreadsheetReader(FILES_PATH . 'OwlSharesTest.csv');
+$ReaderSS              = new SpreadsheetReader(FILES_PATH . 'ssProvide.csv');
+$ReaderOwlnav          = new SpreadsheetReader(FILES_PATH . 'OWLnav.xlsx');
+$ReaderOwlSharesTest   = new SpreadsheetReader(FILES_PATH . 'OwlSharesTest.csv');
+$ReaderOwlSharesSector = new SpreadsheetReader(FILES_PATH . 'OwlSharesSector.csv');
+$ReaderOwlSharesGeo    = new SpreadsheetReader(FILES_PATH . 'OwlSharesGeo.csv');
 
 $countSS = 0;
 foreach ($ReaderSS as $RowSS) {
@@ -118,7 +120,7 @@ foreach ($ReaderSS as $RowSS) {
                         $sql_etf_performance = "INSERT INTO etf_performance (etf_id, price, ytd_returns, nav_change_percent, nav_change, nav, market_price_change_percent, market_price_change, market_price, nav_returns_1yr, market_returns_1yr, nav_returns_3yr, market_returns_3yr, nav_returns_5yr, market_returns_5yr, nav_returns_10yr, market_returns_10yr, nav_change_since_inception, market_price_change_since_inception, total_net_assets, dist_rate_at_nav, standard_yield_30d, gross_expense_ratio, net_expense_ration, shares_outstanding, tickers, no_of_holdings, ltcg_amount, ltcg_record_date, ltcg_ex_date, ltcg_reinvestment_date, ltcg_payable_date, ltcg_reinvestment_price, stcg_amount, stcg_record_date, stcg_ex_date, stcg_reinvestment_date, stcg_payable_date, stcg_reinvestment_price, income_amount, income_record_date, income_ex_date, income_reinvestment_date, income_payable_date, income_reinvestment_price, tdps_amount, tdps_record_date, tdps_ex_date, tdps_reinvestment_date, tdps_payable_date, tdps_reinvestment_price, bid_ask_spread, avg_mp_nav_inception, avg_mp_nav_close, nav_high, nav_low, mp_high, mp_low, total_period_days, nav_days, premium_days, discount_days, greatest_premium, greatest_discount, sp_benchmark_return_1yr, owl500_index_return_1yr, sp_benchmark_return_3yr, owl500_index_return_3yr, sp_benchmark_return_5yr, owl500_index_return_5yr, sp_benchmark_return_10yr, owl500_index_return_10yr, sp500_each_yr, owl500_index_each_yr, cytd_nav, cytd_mp) VALUES (" . $etf_id . "," . $price . "," . $ytd_returns . "," . $nav_change_percent . "," . $nav_change . "," . $nav . "," . $market_price_change_percent . "," . $market_price_change . "," . $market_price . "," . $nav_returns_1yr . "," . $market_returns_1yr . "," . $nav_returns_3yr . "," . $market_returns_3yr . "," . $nav_returns_5yr . "," . $market_returns_5yr . "," . $nav_returns_10yr . "," . $market_returns_10yr . "," . $nav_change_since_inception . "," . $market_price_change_since_inception . "," . $total_net_assets . "," . $dist_rate_at_nav . "," . $standard_yield_30d . "," . $gross_expense_ratio . "," . $net_expense_ration . "," . $shares_outstanding . ",'" . $tickers . "'," . $no_of_holdings . "," . $ltcg_amount . ",'" . $ltcg_record_date . "','" . $ltcg_ex_date . "','" . $ltcg_reinvestment_date . "','" . $ltcg_payable_date . "'," . $ltcg_reinvestment_price . "," . $stcg_amount . ",'" . $stcg_record_date . "','" . $stcg_ex_date . "','" . $stcg_reinvestment_date . "','" . $stcg_payable_date . "'," . $stcg_reinvestment_price . "," . $income_amount . ",'" . $income_record_date . "','" . $income_ex_date . "','" . $income_reinvestment_date . "','" . $income_payable_date . "'," . $income_reinvestment_price . "," . $tdps_amount . ",'" . $tdps_record_date . "','" . $tdps_ex_date . "','" . $tdps_reinvestment_date . "','" . $tdps_payable_date . "'," . $tdps_reinvestment_price . "," . $bid_ask_spread . "," . $avg_mp_nav_inception . "," . $avg_mp_nav_close . "," . $nav_high . "," . $nav_low . "," . $mp_high . "," . $mp_low . "," . $total_period_days . "," . $nav_days . "," . $premium_days . "," . $discount_days . "," . $greatest_premium . "," . $greatest_discount . "," . $sp_benchmark_return_1yr . "," . $owl500_index_return_1yr . "," . $sp_benchmark_return_3yr . "," . $owl500_index_return_3yr . "," . $sp_benchmark_return_5yr . "," . $owl500_index_return_5yr . "," . $sp_benchmark_return_10yr . "," . $owl500_index_return_10yr . "," . $sp500_each_yr . "," . $owl500_index_each_yr . "," . $cytd_nav . "," . $cytd_mp . ")";
                         
                         if ($db->query($sql_etf_performance) === TRUE) {
-                        	//Update Calculations After Insertion
+                            //Update Calculations After Insertion
                             $last_id_etf_performance = $db->lastId();
                             //Get Nav
                             $queryNav                = $db->query("SELECT nav  FROM etf_performance WHERE id =" . $last_id_etf_performance);
@@ -169,7 +171,7 @@ foreach ($ReaderSS as $RowSS) {
         $asset_class     = functions::valueCheck($RowSS[15]);
         $currency        = functions::valueCheck($RowSS[68]);
         $sql_securities  = "INSERT INTO securities (ticker, name, asset_class, currency)
-					VALUES (" . $ticker . "," . $name_securities . "," . $asset_class . "," . $currency . ")";
+                    VALUES (" . $ticker . "," . $name_securities . "," . $asset_class . "," . $currency . ")";
         
         if ($db->query($sql_securities) === TRUE) {
             $last_id_securities   = $db->lastId();
@@ -181,10 +183,10 @@ foreach ($ReaderSS as $RowSS) {
             $market_value_base    = functions::valueCheck($RowSS[58]);
             $market_value_local   = functions::valueCheck($RowSS[59]);
             $sql_etf_portfolio    = "INSERT INTO etf_portfolio (security_id, weight, shares, market_value_base, market_value_local, etf_id)
-						VALUES (" . $security_id . "," . $weight_etf_portfolio . "," . $shares . "," . $market_value_base . "," . $market_value_local . "," . $etf_id . ")";
+                        VALUES (" . $security_id . "," . $weight_etf_portfolio . "," . $shares . "," . $market_value_base . "," . $market_value_local . "," . $etf_id . ")";
             
             if ($db->query($sql_etf_portfolio) === TRUE) {
-                echo "New record created successfully";
+                //echo "New record created successfully";
             } else {
                 echo "Error: " . $sql_etf_portfolio . "<br>" . $db->error;
             }
@@ -192,17 +194,72 @@ foreach ($ReaderSS as $RowSS) {
             echo "Error: " . $sql_securities . "<br>" . $db->error;
         }
         
-        //etf_sectors
-        // $name_etf_sectors = functions::valueCheck($RowSS[]);
-        // $weight_etf_sectors = functions::valueCheck($RowSS[]);
-        // $sql_etf_sectors = "INSERT INTO etf_sectors (etf_id, name, weight)
-        // VALUES ("$etf_id.",".$name_etf_sectors.",".$weight_etf_sectors.")";
-        
-        // if ($db->query($sql_etf_sectors) === TRUE) {
-        //     echo "New record created successfully";
-        // } else {
-        //     echo "Error: " . $sql_etf_sectors . "<br>" . $db->error;
-        // }
     }
     $countSS++;
+}
+//etf_sectors
+$countSector = 0;
+foreach ($ReaderOwlSharesSector as $RowSector) {
+    if ($countSector != 0 && $RowSector[0] != '') {
+        
+        $name_etf_sectors   = strtoupper(functions::valueCheck($RowSector[0]));
+        $weight_etf_sectors = functions::valueCheck($RowSector[1]);
+        $queryId            = $db->query("SELECT id  FROM sectors WHERE name ='" . $name_etf_sectors . "'");
+        $total              = $db->getRow($queryId);
+        $id                 = (isset($total['id']) ? $total['id'] : 0);
+        $id_etf_sectors     = $id;
+        if ($id == 0) {
+            $sql_etf_sectors_names = "INSERT INTO sectors (name)
+        VALUES ('" . $name_etf_sectors . "')";
+            if ($db->query($sql_etf_sectors_names) === TRUE) {
+                $last_id_etf_sector = $db->lastId();
+                $id_etf_sectors     = $last_id_etf_sector;
+            } else {
+                echo "Error: " . $sql_etf_sectors_names . "<br>" . $db->error;
+            }
+        }
+        $sql_etf_sectors = "INSERT INTO etf_sectors (etf_id, sector_id, weight)
+        VALUES (" . $etf_id . "," . $id_etf_sectors . "," . $weight_etf_sectors . ")";
+        
+        if ($db->query($sql_etf_sectors) === TRUE) {
+            //echo "New record created successfully";
+        } else {
+            echo "Error: " . $sql_etf_sectors . "<br>" . $db->error;
+        }
+        
+    }
+    $countSector++;
+}
+
+//etf_countries
+$countGeo = 0;
+foreach ($ReaderOwlSharesGeo as $RowGeo) {
+    if ($countGeo != 0 && $RowGeo[0] != '') {
+        
+        $name_etf_countries = strtoupper(functions::valueCheck($RowGeo[0]));
+        $queryId            = $db->query("SELECT id  FROM countries WHERE name ='" . $name_etf_countries . "'");
+        $total              = $db->getRow($queryId);
+        $id                 = (isset($total['id']) ? $total['id'] : 0);
+        $id_etf_countries   = $id;
+        if ($id == 0) {
+            $sql_etf_countries_names = "INSERT INTO countries (name)
+        VALUES ('" . $name_etf_countries . "')";
+            if ($db->query($sql_etf_countries_names) === TRUE) {
+                $last_id_etf_country = $db->lastId();
+                $id_etf_countries    = $last_id_etf_country;
+            } else {
+                echo "Error: " . $sql_etf_countries_names . "<br>" . $db->error;
+            }
+        }
+        $weight_etf_countries = functions::valueCheck($RowGeo[1]);
+        $sql_etf_countries    = "INSERT INTO etf_countries (etf_id, country_id, weight)
+    VALUES (" . $etf_id . "," . $id_etf_countries . "," . $weight_etf_countries . ")";
+        
+        if ($db->query($sql_etf_countries) === TRUE) {
+            //echo "New record created successfully";
+        } else {
+            echo "Error: " . $sql_etf_countries . "<br>" . $db->error;
+        }
+    }
+    $countGeo++;
 }
