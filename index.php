@@ -10,27 +10,27 @@ $db->connect();
 
 $etf_id = 1; // Currently only 1 ETF
 
-$querySector              = $db->query(" SELECT name,weight FROM sectors s,etf_sectors es WHERE es.id IN (SELECT MAX(id) FROM etf_sectors GROUP BY sector_id) AND s.id = sector_id");
-$totalSector                   = $db->getRows($querySector);
+$querySector     = $db->query(" SELECT name,weight FROM sectors s,etf_sectors es WHERE es.id IN (SELECT MAX(id) FROM etf_sectors GROUP BY sector_id) AND s.id = sector_id");
+$totalSector     = $db->getRows($querySector);
 $totalSectorHtml = "";
-$color_array = array();
+$color_array     = array();
 foreach ($totalSector as $key => $value) {
-	$color = functions::random_color($color_array);
-	$color_array[] = $color;
-	$totalSectorHtml .= "{y:".$value['weight'].",color:'#".$color."',name:'".$value['name']."'},";
+    $color         = functions::random_color($color_array);
+    $color_array[] = $color;
+    $totalSectorHtml .= "{y:" . $value['weight'] . ",color:'#" . $color . "',name:'" . $value['name'] . "'},";
 }
-$totalSectorHtml = rtrim($totalSectorHtml,',');
+$totalSectorHtml = rtrim($totalSectorHtml, ',');
 
-$queryGeo              = $db->query(" SELECT name,weight FROM countries c,etf_countries ec WHERE ec.id IN (SELECT MAX(id) FROM etf_countries GROUP BY country_id) AND c.id = country_id");
-$totalGeo                   = $db->getRows($queryGeo);
-$totalGeoHtml ="";
-$color_array = array();
+$queryGeo     = $db->query(" SELECT name,weight FROM countries c,etf_countries ec WHERE ec.id IN (SELECT MAX(id) FROM etf_countries GROUP BY country_id) AND c.id = country_id");
+$totalGeo     = $db->getRows($queryGeo);
+$totalGeoHtml = "";
+$color_array  = array();
 foreach ($totalGeo as $key => $value) {
-	$color = functions::random_color($color_array);
-	$color_array[] = $color;
-	$totalGeoHtml .= "{y:".$value['weight'].",color:'#".$color."',name:'".$value['name']."'},";
+    $color         = functions::random_color($color_array);
+    $color_array[] = $color;
+    $totalGeoHtml .= "{y:" . $value['weight'] . ",color:'#" . $color . "',name:'" . $value['name'] . "'},";
 }
-$totalGeoHtml = rtrim($totalGeoHtml,',');
+$totalGeoHtml = rtrim($totalGeoHtml, ',');
 
 ?>
 <!DOCTYPE html>
@@ -85,7 +85,9 @@ $totalGeoHtml = rtrim($totalGeoHtml,',');
             },
             series: [{
                 name :'% of Total',
-                data: [<?php echo $totalSectorHtml; ?>]
+                data: [<?php
+echo $totalSectorHtml;
+?>]
             }]
         });
     });
@@ -130,7 +132,9 @@ $totalGeoHtml = rtrim($totalGeoHtml,',');
             },
             series: [{
                 name :'% of Total',
-                data: [<?php echo $totalGeoHtml; ?>]
+                data: [<?php
+echo $totalGeoHtml;
+?>]
             }],
         });
     });
