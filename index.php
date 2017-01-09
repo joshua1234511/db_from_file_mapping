@@ -47,11 +47,12 @@ $queryPortfolio     = $db->query(" SELECT * FROM etf_portfolio  WHERE id=".$etf_
 $totalPortfolio     = $db->getRows($queryPortfolio);
 var_dump($totalPortfolio);
 
+if(isset($totalPortfolio[0]['security_id'])){
 //Securities
 $querySecurities     = $db->query(" SELECT * FROM securities  WHERE id=".$totalPortfolio[0]['security_id']."  ORDER BY id DESC LIMIT 1");
 $totalSecurities     = $db->getRows($querySecurities);
 var_dump($totalSecurities);
-
+}
 ?>
 
 PRICE AND YTD RETURN<br>
